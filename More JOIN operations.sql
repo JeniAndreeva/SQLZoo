@@ -120,3 +120,28 @@ WHERE ord=1
 GROUP BY actor.name
 HAVING COUNT(*) >= 15;
 
+14.released in the year 1978
+--List the films released in the year 1978 ordered by the number of actors in the cast, then by title.
+
+SELECT movie.title, COUNT(*)
+FROM movie
+JOIN casting ON(casting.movieid=movie.id)
+WHERE movie.yr=1978
+GROUP BY movie.title
+ORDER BY COUNT(*) DESC, movie.title
+
+15.with 'Art Garfunkel'
+--List all the people who have worked with 'Art Garfunkel'.
+
+SELECT actor.name
+FROM (SELECT movie.*
+          FROM movie
+          JOIN casting ON (casting.movieid = movie.id)
+          JOIN actor ON (actor.id = casting.actorid)
+          WHERE actor.name = 'Art Garfunkel') AS movie
+JOIN (SELECT actor.*, casting.movieid
+          FROM actor
+          JOIN casting ON (casting.actorid = actor.id)
+          WHERE actor.name != 'Art Garfunkel') as actor
+ON movie.id = actor.movieid;
+
